@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "lightgreen", "id": "Category 1", "label": "Com base no curr\u00edculo fornecido e na descri\u00e7\u00e3o da vaga para Gestor de Projetos PMI, aqui est\u00e1 um plano de desenvolvimento dividido em 6 passos, cada um focado em uma compet\u00eancia principal e subcategorias relevantes:", "shape": "ellipse"}, {"color": "lightgreen", "id": "Category 2", "label": "1. Compet\u00eancia T\u00e9cnica: Este \u00e9 o conhecimento e habilidades relacionados \u00e0 gest\u00e3o de projetos.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 1: Obtenha uma certifica\u00e7\u00e3o PMP (Project Management Professional) do PMI (Project Management Institute). Isso provar\u00e1 seu conhecimento em gerenciamento de projetos.", "label": "- Etapa 1: Obtenha uma certifica\u00e7\u00e3o PMP (Project Management Professional) do PMI (Project Management Institute). Isso provar\u00e1 seu conhecimento em gerenciamento de projetos.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 2: Adquira experi\u00eancia pr\u00e1tica em gerenciamento de projetos. Isso pode ser feito atrav\u00e9s de est\u00e1gios ou trabalho em projetos em sua atual fun\u00e7\u00e3o.", "label": "- Etapa 2: Adquira experi\u00eancia pr\u00e1tica em gerenciamento de projetos. Isso pode ser feito atrav\u00e9s de est\u00e1gios ou trabalho em projetos em sua atual fun\u00e7\u00e3o.", "shape": "box"}, {"color": "lightgreen", "id": "Category 3", "label": "2. Compet\u00eancia em Neg\u00f3cios e Estrat\u00e9gia: Esta \u00e9 a capacidade de alinhar seus projetos com a estrat\u00e9gia e os objetivos do neg\u00f3cio.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 3: Fa\u00e7a cursos de estrat\u00e9gia de neg\u00f3cios e gest\u00e3o estrat\u00e9gica. Isso ajudar\u00e1 voc\u00ea a entender como alinhar projetos com os objetivos do neg\u00f3cio.", "label": "- Etapa 3: Fa\u00e7a cursos de estrat\u00e9gia de neg\u00f3cios e gest\u00e3o estrat\u00e9gica. Isso ajudar\u00e1 voc\u00ea a entender como alinhar projetos com os objetivos do neg\u00f3cio.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 4: Adquira experi\u00eancia pr\u00e1tica em estrat\u00e9gia de neg\u00f3cios, seja atrav\u00e9s do trabalho atual ou de um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil.", "label": "- Etapa 4: Adquira experi\u00eancia pr\u00e1tica em estrat\u00e9gia de neg\u00f3cios, seja atrav\u00e9s do trabalho atual ou de um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil.", "shape": "box"}, {"color": "lightgreen", "id": "Category 4", "label": "3. Compet\u00eancia em Lideran\u00e7a: Esta \u00e9 a capacidade de liderar e gerenciar uma equipe.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 5: Fa\u00e7a cursos de lideran\u00e7a e gest\u00e3o de equipe. Isso fornecer\u00e1 as habilidades necess\u00e1rias para liderar uma equipe de projeto.", "label": "- Etapa 5: Fa\u00e7a cursos de lideran\u00e7a e gest\u00e3o de equipe. Isso fornecer\u00e1 as habilidades necess\u00e1rias para liderar uma equipe de projeto.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 6: Adquira experi\u00eancia pr\u00e1tica em lideran\u00e7a. Isso pode ser feito atrav\u00e9s de um papel de lideran\u00e7a no trabalho ou em uma organiza\u00e7\u00e3o estudantil.", "label": "- Etapa 6: Adquira experi\u00eancia pr\u00e1tica em lideran\u00e7a. Isso pode ser feito atrav\u00e9s de um papel de lideran\u00e7a no trabalho ou em uma organiza\u00e7\u00e3o estudantil.", "shape": "box"}, {"color": "lightgreen", "id": "Category 5", "label": "4. Compet\u00eancia em Comunica\u00e7\u00e3o: Esta \u00e9 a habilidade de comunicar efetivamente com todas as partes interessadas.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 7: Fa\u00e7a cursos de comunica\u00e7\u00e3o empresarial e gerenciamento de stakeholders. Isso ajudar\u00e1 a melhorar suas habilidades de comunica\u00e7\u00e3o no ambiente de neg\u00f3cios.", "label": "- Etapa 7: Fa\u00e7a cursos de comunica\u00e7\u00e3o empresarial e gerenciamento de stakeholders. Isso ajudar\u00e1 a melhorar suas habilidades de comunica\u00e7\u00e3o no ambiente de neg\u00f3cios.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 8: Pratique suas habilidades de comunica\u00e7\u00e3o em um ambiente profissional. Isso pode ser feito no trabalho atual ou em um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil.", "label": "- Etapa 8: Pratique suas habilidades de comunica\u00e7\u00e3o em um ambiente profissional. Isso pode ser feito no trabalho atual ou em um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil.", "shape": "box"}, {"color": "lightgreen", "id": "Category 6", "label": "5. Compet\u00eancia em Gest\u00e3o de Riscos: Esta \u00e9 a habilidade de identificar e gerenciar riscos em projetos.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 9: Fa\u00e7a cursos de gest\u00e3o de riscos. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para identificar e gerenciar riscos em projetos.", "label": "- Etapa 9: Fa\u00e7a cursos de gest\u00e3o de riscos. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para identificar e gerenciar riscos em projetos.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 10: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de riscos. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de riscos.", "label": "- Etapa 10: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de riscos. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de riscos.", "shape": "box"}, {"color": "lightgreen", "id": "Category 7", "label": "6. Compet\u00eancia em Gest\u00e3o de Mudan\u00e7as: Esta \u00e9 a habilidade de gerenciar mudan\u00e7as e transforma\u00e7\u00f5es organizacionais.", "shape": "ellipse"}, {"color": "lightblue", "id": "- Etapa 11: Fa\u00e7a cursos de gest\u00e3o de mudan\u00e7as. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para gerenciar mudan\u00e7as e transforma\u00e7\u00f5es em uma organiza\u00e7\u00e3o.", "label": "- Etapa 11: Fa\u00e7a cursos de gest\u00e3o de mudan\u00e7as. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para gerenciar mudan\u00e7as e transforma\u00e7\u00f5es em uma organiza\u00e7\u00e3o.", "shape": "box"}, {"color": "lightblue", "id": "- Etapa 12: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de mudan\u00e7as. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de mudan\u00e7as.", "label": "- Etapa 12: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de mudan\u00e7as. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de mudan\u00e7as.", "shape": "box"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Category 2", "to": "- Etapa 1: Obtenha uma certifica\u00e7\u00e3o PMP (Project Management Professional) do PMI (Project Management Institute). Isso provar\u00e1 seu conhecimento em gerenciamento de projetos."}, {"arrows": "to", "from": "Category 2", "to": "- Etapa 2: Adquira experi\u00eancia pr\u00e1tica em gerenciamento de projetos. Isso pode ser feito atrav\u00e9s de est\u00e1gios ou trabalho em projetos em sua atual fun\u00e7\u00e3o."}, {"arrows": "to", "from": "Category 3", "to": "- Etapa 3: Fa\u00e7a cursos de estrat\u00e9gia de neg\u00f3cios e gest\u00e3o estrat\u00e9gica. Isso ajudar\u00e1 voc\u00ea a entender como alinhar projetos com os objetivos do neg\u00f3cio."}, {"arrows": "to", "from": "Category 3", "to": "- Etapa 4: Adquira experi\u00eancia pr\u00e1tica em estrat\u00e9gia de neg\u00f3cios, seja atrav\u00e9s do trabalho atual ou de um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil."}, {"arrows": "to", "from": "Category 4", "to": "- Etapa 5: Fa\u00e7a cursos de lideran\u00e7a e gest\u00e3o de equipe. Isso fornecer\u00e1 as habilidades necess\u00e1rias para liderar uma equipe de projeto."}, {"arrows": "to", "from": "Category 4", "to": "- Etapa 6: Adquira experi\u00eancia pr\u00e1tica em lideran\u00e7a. Isso pode ser feito atrav\u00e9s de um papel de lideran\u00e7a no trabalho ou em uma organiza\u00e7\u00e3o estudantil."}, {"arrows": "to", "from": "Category 5", "to": "- Etapa 7: Fa\u00e7a cursos de comunica\u00e7\u00e3o empresarial e gerenciamento de stakeholders. Isso ajudar\u00e1 a melhorar suas habilidades de comunica\u00e7\u00e3o no ambiente de neg\u00f3cios."}, {"arrows": "to", "from": "Category 5", "to": "- Etapa 8: Pratique suas habilidades de comunica\u00e7\u00e3o em um ambiente profissional. Isso pode ser feito no trabalho atual ou em um papel de lideran\u00e7a em uma organiza\u00e7\u00e3o estudantil."}, {"arrows": "to", "from": "Category 6", "to": "- Etapa 9: Fa\u00e7a cursos de gest\u00e3o de riscos. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para identificar e gerenciar riscos em projetos."}, {"arrows": "to", "from": "Category 6", "to": "- Etapa 10: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de riscos. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de riscos."}, {"arrows": "to", "from": "Category 7", "to": "- Etapa 11: Fa\u00e7a cursos de gest\u00e3o de mudan\u00e7as. Isso fornecer\u00e1 a voc\u00ea as habilidades necess\u00e1rias para gerenciar mudan\u00e7as e transforma\u00e7\u00f5es em uma organiza\u00e7\u00e3o."}, {"arrows": "to", "from": "Category 7", "to": "- Etapa 12: Adquira experi\u00eancia pr\u00e1tica na gest\u00e3o de mudan\u00e7as. Isso pode ser feito atrav\u00e9s de um papel em gerenciamento de projetos onde voc\u00ea \u00e9 respons\u00e1vel pela gest\u00e3o de mudan\u00e7as."}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"layout": {"hierarchical": {"enabled": true, "direction": "UD", "sortMethod": "hubsize"}}, "nodes": {"font": {"size": 16, "color": "black"}, "shape": "box", "color": "lightblue"}, "edges": {"color": {"inherit": true}, "arrows": {"to": {"enabled": true, "scaleFactor": 1}}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

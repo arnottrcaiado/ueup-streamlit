@@ -1,0 +1,5 @@
+streamlit
+openai==0.028
+PyPDF2
+graphviz
+pyvis
