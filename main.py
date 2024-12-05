@@ -107,7 +107,7 @@ def create_mermaid_diagram(processed_list):
 
 # Interface com Streamlit
 def main():
-    st.title("Gerador de Trilhas de Formação")
+    st.title("UeUp - Gerador de Trilhas de Formação. 5/12")
     st.write("Envie um currículo e uma descrição de vaga para gerar uma trilha de formação personalizada.")
 
     # Entrada de Currículo
