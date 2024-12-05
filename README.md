@@ -121,7 +121,7 @@ def generate_training_plan(cv_text, job_description, num_steps):
     {job_description}
     '''
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "Você é um mentor de carreiras especializado."},
             {"role": "user", "content": prompt}

@@ -20,55 +20,68 @@ def extract_text_from_pdf(file):
 # Função para processar informações de requisitos e competências
 def generate_training_plan(cv_text, job_description, num_steps):
     prompt = f"""
-    Gere um plano de desenvolvimento com até {num_steps} passos para que o candidato preencha as lacunas de competências.
-    Cada passo deve ser categorizado em até 5 categorias de competências principais. 
-    Responda na forma de categorias, e para cada categoria liste as etapas necessárias.
-    Baseie-se nas seguintes informações:
-    
+    Você é um mentor de carreiras especializado em tecnologia e desenvolvimento profissional. 
+    Por favor, crie um plano de desenvolvimento com até {num_steps} passos para que o candidato preencha lacunas de competências.
+
+    **Instruções específicas:**
+    1. Cada passo deve ser categorizado em até 5 categorias principais de competências.
+    2. Para cada categoria, liste etapas claras e objetivas necessárias para o progresso.
+    3. Certifique-se de que o plano seja relevante para as informações fornecidas.
+    4. Não inclua sugestões que não sigam princípios éticos, legais ou sejam inconsistentes com o propósito da aplicação.
+
+    Caso encontre incoerências ou informações insuficientes, avise o usuário de forma educada e peça informações adicionais.
+
+    **Informações fornecidas:**
     Currículo:
     {cv_text}
-    
+
     Descrição da vaga:
     {job_description}
     """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Você é um mentor de carreiras especializado em tecnologia e desenvolvimento profissional."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7
-    )
-    return response["choices"][0]["message"]["content"]
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7
+        )
+        return response["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"Erro ao gerar o plano: {e}"
 
 # Função para gerar trilhas de aprendizagem na forma de lista compacta
 def generate_learning_tracks_from_plan(training_plan, num_steps):
     prompt = f"""
-    Com base no plano de desenvolvimento abaixo, gere trilhas de aprendizagem com até {num_steps} etapas.
-    A saída deve ser no formato:
-    Categoria -> Nome do Curso ou Certificação.
+    Com base no plano de desenvolvimento fornecido, gere trilhas de aprendizagem com até {num_steps} etapas.
+    **Formato esperado:**
+    - Categoria -> Nome do Curso ou Certificação.
+    - Não inclua explicações adicionais ou comentários.
 
-    Certifique-se de não incluir explicações adicionais ou comentários. Apenas forneça as instruções no formato válido para Mermaid.js.
+    **Instruções específicas:**
+    1. As sugestões devem estar alinhadas com o plano de desenvolvimento.
+    2. Não inclua informações que fujam dos princípios éticos ou legais.
+    3. Caso o plano seja insuficiente, forneça uma mensagem solicitando melhorias ou mais detalhes.
 
-    Plano de Desenvolvimento:
+    **Plano de Desenvolvimento fornecido:**
     {training_plan}
     """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Você é um mentor de carreiras especializado em tecnologia e desenvolvimento profissional."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7
-    )
-    return response["choices"][0]["message"]["content"]
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7
+        )
+        return response["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"Erro ao gerar as trilhas: {e}"
 
 # Função para filtrar linhas válidas para Mermaid
 def filter_valid_mermaid_lines(learning_tracks):
-    """
-    Filtra apenas as linhas que estão no formato válido para Mermaid.js,
-    incluindo linhas com pipes (|label|).
-    """
     valid_lines = []
     for line in learning_tracks.split("\n"):
         if re.match(r"^[A-Za-z]+\[[^\]]+\] --> \|.*\| [A-Za-z]+\[[^\]]+\]$", line.strip()) or \
@@ -79,10 +92,6 @@ def filter_valid_mermaid_lines(learning_tracks):
 
 # Função para sanitizar linhas para o Mermaid.js
 def sanitize_mermaid_lines(lines):
-    """
-    Sanitiza as linhas para o formato correto do Mermaid.js,
-    removendo ou ajustando pipes e outros caracteres problemáticos.
-    """
     sanitized_lines = []
     for line in lines:
         line = re.sub(r"\|.*\|", lambda match: match.group(0).replace(" ", "_").replace(".", ""), line)
@@ -91,9 +100,6 @@ def sanitize_mermaid_lines(lines):
 
 # Função para criar o diagrama no estilo hierárquico com Mermaid
 def create_mermaid_diagram(processed_list):
-    """
-    Cria o código Mermaid para um diagrama hierárquico com categorias e cursos.
-    """
     mermaid_code = "graph TD\n"
     for line in processed_list:
         mermaid_code += f"    {line}\n"
