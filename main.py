@@ -56,7 +56,7 @@ def generate_learning_tracks_from_plan(training_plan, num_steps):
     prompt = f"""
     Com base no plano de desenvolvimento fornecido, gere um diagrama de trilha de aprendizagem.
     **Instruções específicas:**
-    1. Deve gerar no formato mermaid, com pelo menos dois niveis
+    1. Deve gerar no formato mermaid
     2. Devem estar alinhada com o plano de desenvolvimento.
     2. Não inclua comentários e ou informações que fujam dos princípios éticos ou legais.
     3. Caso o plano seja insuficiente, forneça uma mensagem solicitando melhorias ou mais detalhes.
