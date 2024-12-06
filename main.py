@@ -40,7 +40,7 @@ def generate_training_plan(cv_text, job_description, num_steps):
     """
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
                 {"role": "user", "content": prompt}
@@ -54,14 +54,11 @@ def generate_training_plan(cv_text, job_description, num_steps):
 # Função para gerar trilhas de aprendizagem na forma de lista compacta
 def generate_learning_tracks_from_plan(training_plan, num_steps):
     prompt = f"""
-    Com base no plano de desenvolvimento fornecido, gere trilhas de aprendizagem com até {num_steps} etapas.
-    **Formato esperado:**
-    - Categoria -> Nome do Curso ou Certificação.
-    - Não inclua explicações adicionais ou comentários.
-
+    Com base no plano de desenvolvimento fornecido, gere um diagrama de trilha de aprendizagem.
     **Instruções específicas:**
-    1. As sugestões devem estar alinhadas com o plano de desenvolvimento.
-    2. Não inclua informações que fujam dos princípios éticos ou legais.
+    1. Deve gerar no formato mermaid, com pelo menos dois niveis
+    2. Devem estar alinhada com o plano de desenvolvimento.
+    2. Não inclua comentários e ou informações que fujam dos princípios éticos ou legais.
     3. Caso o plano seja insuficiente, forneça uma mensagem solicitando melhorias ou mais detalhes.
 
     **Plano de Desenvolvimento fornecido:**
@@ -69,7 +66,7 @@ def generate_learning_tracks_from_plan(training_plan, num_steps):
     """
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
                 {"role": "user", "content": prompt}
@@ -107,7 +104,7 @@ def create_mermaid_diagram(processed_list):
 
 # Interface com Streamlit
 def main():
-    st.title("UeUp - Gerador de Trilhas de Formação. 5/12")
+    st.title("UeUp - Gerador de Trilhas de Formação. 5/12. v1.1")
     st.write("Envie um currículo e uma descrição de vaga para gerar uma trilha de formação personalizada.")
 
     # Entrada de Currículo
@@ -166,7 +163,7 @@ def main():
                 st.write(sanitized_list)
 
             # Gerar e exibir o diagrama
-            st.subheader("Diagrama no Estilo BPMN (Responsivo)")
+            st.subheader("Diagrama - Trilha / Itinerario")
             mermaid_code = create_mermaid_diagram(sanitized_list)
             st.components.v1.html(
                 f"""

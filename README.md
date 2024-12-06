@@ -121,7 +121,7 @@ def generate_training_plan(cv_text, job_description, num_steps):
     {job_description}
     '''
     response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "Você é um mentor de carreiras especializado."},
             {"role": "user", "content": prompt}
@@ -143,7 +143,7 @@ def generate_learning_tracks_from_plan(training_plan, num_steps):
     {training_plan}
     '''
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "Você é um mentor especializado."},
             {"role": "user", "content": prompt}
