@@ -42,7 +42,7 @@ def generate_training_plan(cv_text, job_description, num_steps):
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
+                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional na área de tecnologia da informação."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7
@@ -68,7 +68,7 @@ def generate_learning_tracks_from_plan(training_plan, num_steps):
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional."},
+                {"role": "system", "content": "Você é um mentor especializado em carreiras e desenvolvimento profissional na área de tecnologia da informação."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7
@@ -104,8 +104,10 @@ def create_mermaid_diagram(processed_list):
 
 # Interface com Streamlit
 def main():
-    st.title("UeUp - Gerador de Trilhas de Formação. 5/12. v1.1")
+    st.title("UeUp - Gerador de Trilhas de Formação. 5/12. v1.02")
     st.write("Envie um currículo e uma descrição de vaga para gerar uma trilha de formação personalizada.")
+    st.write("* Atenção: recomendamos não colocar informações pessoais como telefones e cpf *")
+    st.write("* As informações são enviadas para o Chat Gpt *")
 
     # Entrada de Currículo
     st.subheader("Currículo")
